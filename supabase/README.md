@@ -1,0 +1,53 @@
+# Supabase 初回設定
+
+まだクラウド側は未作成です。以下を一度設定すると、参加チームの進捗共有と管理者のリアルタイム一覧が動きます。GitHub Pagesには公開キーだけを渡します。
+
+1. [Supabase Dashboard](https://supabase.com/dashboard) で新しいプロジェクトを作成します。データベースのパスワードは運営が保管してください。
+2. Authentication の Sign In / Providers で **Anonymous Sign-Ins** を有効にします。参加者にはメールやパスワードを要求しません。公開運用ではSupabaseの匿名登録のレート制限・CAPTCHA設定も確認してください。
+3. SQL Editor で `migrations/001_workshop.sql` の全文を実行します。続いて002〜004のSQLも順番に実行します。初回専用です。同じSQLの再実行はテーブル重複エラーになります。
+4. ローカルで `npm run setup:seed` を実行します。生成済みなら再実行不要です。`seed.local.sql` をSQL Editorで実行します。`codes.local.md` に開催回ID、13課題のパスワードがあります。これらの生成ファイルはGit対象外です。課題コードは解決確認後に運営から渡します。
+5. `migrations/002_admin_reset.sql`、`003_no_join_code.sql`、`004_public_admin.sql` を順番に実行します。管理者ユーザーの作成は不要です。
+
+6. Project Settings / API Keys から Project URL と **Publishable key** を取得します。旧形式の `anon` キーも利用できます。`service_role`・Secret key・DBパスワードはWebアプリに設定しないでください。
+7. `.env.example` を `.env.local` にコピーし、URL・公開キー・開催回IDを設定します。`npm run dev` を再起動します。
+8. 参加画面でチーム名を入力します。ブラウザで `http://127.0.0.1:5173/#/admin` を開き、そのまま一覧を開きます。課題コード提出時に管理画面の点数・チェックが更新されることを確認します。
+
+## GitHub Pages
+
+GitHub Settings → Secrets and variables → Actions → **Variables** に以下の3つを設定します。
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `VITE_WORKSHOP_EVENT_ID`
+
+PagesのSourceをGitHub Actionsにします。既存workflowが公開時にこれらを読み込みます。設定変更時は再ビルドが必要です。管理者画面は公開URL末尾に `#/admin` を付けます。push・公開は別途行ってください。
+
+## 保存・権限の仕組み
+
+参加者はSupabaseの匿名ユーザーとして端末内にセッションを保持します。開催回・ユーザーの組ごとに1チームを登録し、進捗はサーバーに保存します。ブラウザの保存領域を削除すると同じチームへ自動復帰できません。異なる端末への引継ぎ・同一チームでの複数端末参加は現状対応しません。
+
+RLSで自チームか、許可された管理者だけに読み取りを許可します。参加者からテーブルへの直接書き込みは禁止。登録・課題コード検証・リセットはDB関数経由で所有者を確認します。課題コードはprivateスキーマでbcryptハッシュ保存し、得点は完了IDと課題の点数から計算します。完了の複合主キーとチーム行のロックで二重加算を防止します。課題コードの誤入力は5回で1分制限します。4桁コードは運営用の簡易確認であり、強い本人認証ではありません。
+
+運営画面は認証不要です。公開RPCで指定開催回のチーム名・合計点・完了課題を取得し、5秒ごとに更新します。URLを知っている人が全チームの閲覧・全リセットを実行できます。課題パスワード・認証ユーザー情報は公開RPCに含めず、元テーブルの直接アクセス制限は維持します。ネットワークが利用できない間はポイント提出できません。位置だけは従来どおりlocalStorageに保存します。
+
+## 運営時の編集
+
+課題コードは `scripts/task-codes.json` にあります。Gitと公開用ビルドから除外して端末内だけに保管します。新規チェックアウトではseed生成時にランダムなコードを作成します。既存の運営用ファイルは上書きしません。コードを変更した場合はseed SQLの該当 `map_passwords` 更新部分を実行します。seed生成は毎回新しい開催回を作るので、既存開催回のIDを誤って変更しないでください。
+
+タイトル・レベル・点数を編集したら `src/data/issues.ts` とサーバーの `map_tasks` を合わせて更新し、Webを再ビルドします。コード・課題定義は全開催回で共通です。開催を止めるには該当 `private.map_events.active=false` にします。管理者はSQL Editorから許可を削除できます。
+
+## 検証範囲
+
+`npm test` はPostgreSQL/WASMで実際のDB関数・RLSを実行し、コード拒否、初回加算、二重加算防止、所有権、直接書き込み禁止、管理者権限、合計点、復元・リセットを検証します。Authとcryptはテスト用代替関数で、Realtimeのpublication設定は対象外です。Supabase実環境で匿名登録・bcrypt・リアルタイム通知・ログインを検証するには、上の初回設定が必要です。
+
+無料プロジェクトが一時停止している場合、DashboardからResumeして復帰後に再試行してください。利用条件・制限は[公式料金ページ](https://supabase.com/pricing)を確認してください。
+
+## 管理者の全チームリセット
+
+既存プロジェクトでは `supabase/migrations/002_admin_reset.sql` をSQL Editorで一度実行してください（初回構築でも001の後に002を実行）。管理者画面の「全チームをリセット」から確認欄に「リセット」と入力すると、その開催回のチーム名・得点・完了を全削除します。別開催回・課題・コード・管理者は維持します。参加者は5秒ごとの確認でチーム名入力に戻ります。オフラインの場合は接続復帰後に戻ります。匿名セッション自体は維持し、再登録できます。削除は取り消せません。
+
+既存プロジェクトでは `migrations/003_no_join_code.sql` を実行するとチーム名だけで登録できます。開催回が有効な間は、アプリのURLを知っている人が参加できます。課題の4桁パスワードは引き続き必要です。
+
+既存プロジェクトでは `migrations/004_public_admin.sql` を実行して認証不要の運営画面を有効にしてください。テストでは最終設定の未ログイン閲覧・全リセットと、別開催回を削除しないことを確認します。
+
+課題パスワードの `scripts/task-codes.json`、`.env.local`、運営用SQL・コード一覧はGitに含めません。GitHub PagesはActionsの「Deploy to GitHub Pages」から手動で実行します。サイトの予定URLは https://chaimatugoto.github.io/IoTworkshop/ です。

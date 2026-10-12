@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+!.env.example
+supabase/seed.local.sql
+supabase/codes.local.md
+supabase/admin.local.sql
+scripts/task-codes.json

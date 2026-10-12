@@ -1,0 +1,1 @@
+export function Progress({points,count,total}:{points:number;count:number;total:number}){return <div className="progress"><div><strong>{points.toLocaleString()}</strong><span>ポイント</span></div><div className="progress-count"><b>{count} / {total}</b><span>課題完了</span></div><div className="progress-track"><i style={{width:`${count/total*100}%`}}/></div></div>}
