@@ -59,3 +59,7 @@ npm run preview
 運営画面の認証解除には `supabase/migrations/004_public_admin.sql` をSQL Editorで実行します。参加画面には運営画面へのリンクを表示しません。
 
 課題パスワードの `scripts/task-codes.json`、`.env.local`、運営用SQL・コード一覧はGitに含めません。GitHub PagesはActionsの「Deploy to GitHub Pages」から手動で実行します。サイトの予定URLは https://chaimatugoto.github.io/IoTworkshop/ です。
+
+## 結果発表
+
+管理画面の「結果発表を開く」、または `/#/admin/results` で発表画面を開けます。開始画面→下位から順位→チーム名→得点→最終一覧を、クリック・左右矢印・画面ボタンで操作します。Space/Enterでも次へ、Homeで最初へ戻れます。同点は同順位（1位・1位・3位）。取得時点の結果を固定し、開始画面の「結果を再取得」で更新します。全画面表示に対応し、最終一覧は8チームごとにページを分けます。

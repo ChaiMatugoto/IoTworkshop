@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { rankTeams, buildResultSlides } from './lib/results';
+const team=(id:string,score:number)=>({id,team_name:id,completed:[],total_points:score,updated_at:'2026-10-16T00:00:00Z'});
+test('presentation uses competition ranks, respects ties and does not mutate input',()=>{const input=[team('C',10),team('B',100),team('A',100),team('D',0)];const ranked=rankTeams(input);assert.deepEqual(ranked.map(t=>[t.id,t.rank]),[['A',1],['B',1],['C',3],['D',4]]);assert.equal(input[0].id,'C');input[0].total_points=999;assert.equal(ranked.find(t=>t.id==='C')!.total_points,10);});
+test('presentation reveals lower ranks first then names then scores; summaries paginate',()=>{const slides=buildResultSlides([team('winner',40),team('second',25),team('third',10)]);assert.equal(slides[0].kind,'intro');assert.deepEqual(slides.slice(1,4).map(s=>s.kind),['rank','team','score']);assert.equal('team' in slides[1]&&slides[1].team.id,'third');assert.equal('team' in slides[7]&&slides[7].team.id,'winner');assert.equal(slides.at(-1)?.kind,'summary');const pages=buildResultSlides(Array.from({length:17},(_,i)=>team(String(i),i))).filter(s=>s.kind==='summary');assert.deepEqual(pages.map(p=>p.kind==='summary'&&p.teams.length),[8,8,1]);assert.equal(buildResultSlides([]).length,1);});
