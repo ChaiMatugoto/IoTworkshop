@@ -1,3 +1,4 @@
+import { adminRpc } from '../lib/adminAccess';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { admin, eventId, parseTeam, type RemoteTeam } from '../lib/cloud';
 import { buildResultSlides, levelCompletions } from '../lib/results';
@@ -15,7 +16,7 @@ export default function ResultsPresentation(){
   let active=true;
   (async()=>{try{
    if(!admin)throw new Error('共有サーバーが未設定です。');
-   const {data,error}=await admin.rpc('map_admin_teams',{p_event:eventId});
+   const {data,error}=await adminRpc('map_admin_teams',{p_event:eventId});
    if(error)throw new Error('結果を取得できませんでした。接続を確認して再読み込みしてください。');
    if(!Array.isArray(data))throw new Error('結果の形式を確認できませんでした。');
    const next=data.map(parseTeam);if(active)setTeams(next);

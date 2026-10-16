@@ -11,6 +11,7 @@ test('database enforces ownership, codes, rate limits, idempotency, totals and r
  create table auth.users(id uuid primary key);
  create function auth.uid() returns uuid language sql as $$select nullif(current_setting('test.uid',true),'')::uuid$$;
  create function auth.jwt() returns jsonb language sql as $$select jsonb_build_object('is_anonymous',coalesce(current_setting('test.anonymous',true),'true')::boolean)$$;
+ create function extensions.gen_salt(text,integer) returns text language sql as $$select 'salt'::text$$;
  create function extensions.crypt(text,text) returns text language sql as $$select $1$$;
  grant usage on schema public,auth to authenticated;
  insert into auth.users values('00000000-0000-0000-0000-000000000001'),('00000000-0000-0000-0000-000000000002'),('00000000-0000-0000-0000-000000000003');`);
@@ -66,5 +67,17 @@ test('database enforces ownership, codes, rate limits, idempotency, totals and r
  await assert.rejects(db.exec('select * from public.map_teams'),/permission denied/);
  assert.equal(await rpc(`public.map_admin_reset('${event}')`),1);assert.deepEqual(await rpc(`public.map_admin_teams('${event}')`),[]);
  assert.equal((await rpc(`public.map_admin_teams('10000000-0000-0000-0000-000000000002')`)).length,1);
+ await db.exec('reset role');
+ await db.exec(readFileSync(new URL('../migrations/005_admin_password.sql',import.meta.url),'utf8'));
+ await db.exec('set role anon');
+ await assert.rejects(rpc(`public.map_admin_teams('${event}')`),/does not exist/);
+ await assert.rejects(rpc(`public.map_admin_reset('${event}','0000')`),/INVALID_ADMIN_PASSWORD/);
+ await assert.rejects(rpc(`public.map_admin_teams('${event}',null)`),/INVALID_ADMIN_PASSWORD/);
+ await assert.rejects(rpc(`public.map_admin_teams('${event}','0000')`),/INVALID_ADMIN_PASSWORD/);
+ await assert.rejects(rpc(`private.map_admin_teams_data('${event}')`),/permission denied/);
+ const otherEvent='10000000-0000-0000-0000-000000000002';
+ assert.equal((await rpc(`public.map_admin_teams('${otherEvent}','1111')`)).length,1);
+ assert.equal(await rpc(`public.map_admin_reset('${otherEvent}','1111')`),1);
+ assert.deepEqual(await rpc(`public.map_admin_teams('${otherEvent}','1111')`),[]);
  }finally{await db.close();}
 });
