@@ -102,5 +102,23 @@ test('database enforces ownership, codes, rate limits, idempotency, totals and r
  await login(1);assert.equal((await rpc(`public.map_my_team('${event}')`)).completed.length,3);
  assert.equal((await rpc(`public.map_redeem('${manualTeam.id}','a','1234')`)).total_points,75);
  await rpc(`public.map_reset('${manualTeam.id}')`);assert.equal((await rpc(`public.map_my_team('${event}')`)).total_points,0);
+ await db.exec('reset role');
+ await db.exec(readFileSync(new URL('../migrations/008_admin_team_details.sql',import.meta.url),'utf8'));
+ await db.exec('set role anon');
+ await assert.rejects(rpc(`public.map_admin_team_details('${event}','${manualTeam.id}','0000')`),/INVALID_ADMIN_PASSWORD/);
+ await assert.rejects(rpc(`public.map_admin_team_details('${otherEvent}','${manualTeam.id}','1111')`),/TEAM_NOT_FOUND/);
+ assert.deepEqual((await rpc(`public.map_admin_team_details('${event}','${manualTeam.id}','1111')`)).entries,[]);
+ for(const id of ['a','b','c'])await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','${id}','1111')`);
+ await db.exec(`reset role;update public.map_completions set completed_at=case task_id when 'a' then '2020-01-01T12:00:00Z'::timestamptz when 'b' then '2020-01-01T11:00:00Z'::timestamptz else '2020-01-01T11:30:00Z'::timestamptz end where team_id='${manualTeam.id}';set role anon;`);
+ const history=await rpc(`public.map_admin_team_details('${event}','${manualTeam.id}','1111')`);
+ assert.equal(history.team_name,'運営採点');assert.deepEqual(history.entries.map((e:any)=>e.task_id),['b','c','a']);assert.deepEqual(history.entries.map((e:any)=>e.points),[25,40,10]);
+ await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','a','1111')`);
+ assert.deepEqual((await rpc(`public.map_admin_team_details('${event}','${manualTeam.id}','1111')`)).entries,history.entries);
+ await rpc(`public.map_admin_incomplete('${event}','${manualTeam.id}','b','1111')`);
+ assert.deepEqual((await rpc(`public.map_admin_team_details('${event}','${manualTeam.id}','1111')`)).entries.map((e:any)=>e.task_id),['c','a']);
+ await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','b','1111')`);
+ assert.deepEqual((await rpc(`public.map_admin_team_details('${event}','${manualTeam.id}','1111')`)).entries.map((e:any)=>e.task_id),['c','a','b']);
+ await rpc(`public.map_admin_reset('${event}','1111')`);
+ await assert.rejects(rpc(`public.map_admin_team_details('${event}','${manualTeam.id}','1111')`),/TEAM_NOT_FOUND/);
  }finally{await db.close();}
 });
