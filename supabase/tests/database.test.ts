@@ -79,5 +79,19 @@ test('database enforces ownership, codes, rate limits, idempotency, totals and r
  assert.equal((await rpc(`public.map_admin_teams('${otherEvent}','1111')`)).length,1);
  assert.equal(await rpc(`public.map_admin_reset('${otherEvent}','1111')`),1);
  assert.deepEqual(await rpc(`public.map_admin_teams('${otherEvent}','1111')`),[]);
+ await db.exec('reset role');
+ await db.exec(readFileSync(new URL('../migrations/006_admin_complete.sql',import.meta.url),'utf8'));
+ await login(1);const manualTeam=await rpc(`public.map_register('${event}','運営採点')`);
+ await db.exec(`reset role; select set_config('test.uid','',false);set role anon;`);
+ await assert.rejects(rpc(`public.map_admin_complete('${event}','${manualTeam.id}','a','0000')`),/INVALID_ADMIN_PASSWORD/);
+ await assert.rejects(rpc(`public.map_admin_complete('${otherEvent}','${manualTeam.id}','a','1111')`),/TEAM_NOT_FOUND/);
+ await assert.rejects(rpc(`public.map_admin_complete('${event}','${manualTeam.id}','missing','1111')`),/INVALID_TASK/);
+ assert.equal((await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','a','1111')`)).total_points,10);
+ for(let n=0;n<3;n++)assert.equal((await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','a','1111')`)).total_points,10);
+ assert.equal((await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','b','1111')`)).total_points,35);
+ assert.equal((await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','c','1111')`)).total_points,75);
+ await login(1);assert.equal((await rpc(`public.map_my_team('${event}')`)).completed.length,3);
+ assert.equal((await rpc(`public.map_redeem('${manualTeam.id}','a','1234')`)).total_points,75);
+ await rpc(`public.map_reset('${manualTeam.id}')`);assert.equal((await rpc(`public.map_my_team('${event}')`)).total_points,0);
  }finally{await db.close();}
 });

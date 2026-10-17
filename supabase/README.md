@@ -53,3 +53,7 @@ RLSで自チームか、許可された管理者だけに読み取りを許可�
 既存プロジェクトでは `migrations/004_public_admin.sql` を実行して認証不要の運営画面を有効にしてください。テストでは最終設定の未ログイン閲覧・全リセットと、別開催回を削除しないことを確認します。
 
 課題パスワードの `scripts/task-codes.json`、`.env.local`、運営用SQL・コード一覧はGitに含めません。GitHub PagesはActionsの「Deploy to GitHub Pages」から手動で実行します。サイトの予定URLは https://chaimatugoto.github.io/IoTworkshop/ です。
+
+## 管理者による正解登録
+
+既存の005に続けて `supabase/migrations/006_admin_complete.sql` をSQL Editorで実行します。管理者画面の未完了のマスの「正解にする」を押し、チーム・課題・点数を確認して登録します。DB側で管理者パスワード・開催回・チーム・課題を確認し、初回だけ加算します。参加者のパスワード提出と併用しても二重加算しません。参加者画面には通常5秒以内に反映します。開いている発表画面は結果を固定しているため、再読み込みしてから発表してください。
