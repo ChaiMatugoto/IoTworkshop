@@ -90,6 +90,15 @@ test('database enforces ownership, codes, rate limits, idempotency, totals and r
  for(let n=0;n<3;n++)assert.equal((await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','a','1111')`)).total_points,10);
  assert.equal((await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','b','1111')`)).total_points,35);
  assert.equal((await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','c','1111')`)).total_points,75);
+ await db.exec('reset role');
+ await db.exec(readFileSync(new URL('../migrations/007_admin_incomplete.sql',import.meta.url),'utf8'));
+ await db.exec('set role anon');
+ await assert.rejects(rpc(`public.map_admin_incomplete('${event}','${manualTeam.id}','a','0000')`),/INVALID_ADMIN_PASSWORD/);
+ await assert.rejects(rpc(`public.map_admin_incomplete('${otherEvent}','${manualTeam.id}','a','1111')`),/TEAM_NOT_FOUND/);
+ await assert.rejects(rpc(`public.map_admin_incomplete('${event}','${manualTeam.id}','missing','1111')`),/INVALID_TASK/);
+ for(let n=0;n<3;n++){const undone=await rpc(`public.map_admin_incomplete('${event}','${manualTeam.id}','b','1111')`);assert.equal(undone.total_points,50);assert.equal(undone.completed.includes('b'),false);}
+ assert.equal((await rpc(`public.map_admin_teams('${event}','1111')`))[0].total_points,50);
+ assert.equal((await rpc(`public.map_admin_complete('${event}','${manualTeam.id}','b','1111')`)).total_points,75);
  await login(1);assert.equal((await rpc(`public.map_my_team('${event}')`)).completed.length,3);
  assert.equal((await rpc(`public.map_redeem('${manualTeam.id}','a','1234')`)).total_points,75);
  await rpc(`public.map_reset('${manualTeam.id}')`);assert.equal((await rpc(`public.map_my_team('${event}')`)).total_points,0);
