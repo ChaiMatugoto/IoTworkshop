@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
-    "test": "node --import tsx --test src/core.test.ts src/cloud.test.ts src/results.test.ts supabase/tests/database.test.ts",
+    "test": "node --import tsx --test src/core.test.ts src/cloud.test.ts src/results.test.ts src/teamSetup.test.tsx supabase/tests/database.test.ts",
     "preview": "vite preview --host 127.0.0.1",
     "setup:seed": "node --import tsx scripts/generate-seed.ts"
   },
@@ -19,10 +19,12 @@
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.9",
     "@tailwindcss/vite": "^4.1.0",
+    "@types/jsdom": "^30.0.0",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@vitejs/plugin-react": "^4.5.0",
+    "jsdom": "^30.1.3",
     "tailwindcss": "^4.1.0",
     "tsx": "^4.19.0",
     "typescript": "~5.8.3",

@@ -4,7 +4,7 @@ import { move } from '../data/map';
 export function useMovement(position:Point,onMove:(p:Point)=>void,paused:boolean,onOpen:()=>void){
  const keys=useRef(new Set<string>());const current=useRef(position);current.current=position;
  const callback=useRef(onMove);callback.current=onMove;const open=useRef(onOpen);open.current=onOpen;
- useEffect(()=>{const down=(e:KeyboardEvent)=>{if(e.target instanceof HTMLElement&&e.target.closest('input,textarea,select,[contenteditable]'))return;
+ useEffect(()=>{const down=(e:KeyboardEvent)=>{if(e.isComposing||e.keyCode===229)return;if(e.target instanceof HTMLElement&&e.target.closest('input,textarea,select,[contenteditable]'))return;
  const k=e.key.toLowerCase();if(['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d','e'].includes(k)){e.preventDefault();if(k==='e'){if(!e.repeat&&!paused)open.current();}else if(!paused)keys.current.add(k);}};
  const up=(e:KeyboardEvent)=>keys.current.delete(e.key.toLowerCase());const clear=()=>keys.current.clear();
  window.addEventListener('keydown',down);window.addEventListener('keyup',up);window.addEventListener('blur',clear);
