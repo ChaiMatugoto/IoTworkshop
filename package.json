@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
-    "test": "node --import tsx --test src/core.test.ts src/cloud.test.ts src/results.test.ts src/teamSetup.test.tsx supabase/tests/database.test.ts",
+    "test": "node --import tsx --test src/core.test.ts src/cloud.test.ts src/results.test.ts src/parts.test.ts src/teamSetup.test.tsx supabase/tests/database.test.ts",
     "preview": "vite preview --host 127.0.0.1",
     "setup:seed": "node --import tsx scripts/generate-seed.ts"
   },
