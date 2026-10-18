@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { buildings, WIDTH, HEIGHT, river, bridges, roads, onRoad, trafficSignals } from '../data/map';
 import { issues, type Point } from '../data/issues';
+import { PixelWasteBin } from './PixelWasteBin';
 import { PixelTree, PixelBuilding, PixelPerson, PixelBench, PixelLamp } from './PixelSprites';
 const levelColors={1:'#9368ad',2:'#5487ac',3:'#d48a4f'} as const;
 const clearDecoration=(p:Point)=>!onRoad(p)&&!(p.x>river.x-35&&p.x<river.x+river.w+35)&&!buildings.some(b=>p.x>b.x-25&&p.x<b.x+b.w+25&&p.y>b.y-15&&p.y<b.y+b.h+35)&&!issues.some(i=>Math.hypot(i.x-p.x,i.y-p.y)<65)&&!(p.x>90&&p.x<430&&p.y>1390&&p.y<1610);
@@ -11,7 +12,7 @@ export function CityMap({position,completed,nearby,onOpen,overview,onOverviewCha
  const container=useRef<HTMLDivElement>(null);const [size,setSize]=useState({width:1000,height:650});
  useEffect(()=>{const node=container.current;if(!node)return;const observer=new ResizeObserver(entries=>{const r=entries[0].contentRect;if(r.width&&r.height)setSize({width:r.width,height:r.height});});observer.observe(node);return()=>observer.disconnect();},[]);
  const desiredWidth=Math.min(WIDTH,Math.max(360,size.width/1.65));const vh=Math.min(HEIGHT,desiredWidth*size.height/size.width);const vw=vh*size.width/size.height;const camera={x:Math.max(0,Math.min(WIDTH-vw,position.x-vw/2)),y:Math.max(0,Math.min(HEIGHT-vh,position.y-vh/2))};
- const layers=[...trees.map((t,i)=>({y:t.y,node:<PixelTree key={`t${i}`} {...t} variant={i}/>})),...buildings.map((b,i)=>({y:b.y+b.h,node:<PixelBuilding key={`b${i}`} b={b} index={i}/>})),...npcs.map((p,i)=>({y:p.y,node:<PixelPerson key={`n${i}`} position={p} npc tone={i}/>})),{y:position.y,node:<PixelPerson key="player" position={position}/>}].sort((a,b)=>a.y-b.y);
+ const layers=[{y:945,node:<PixelWasteBin key="waste-bin" position={{x:206,y:940}} restored={completed.includes('l1-earthquake')}/>} ,...trees.map((t,i)=>({y:t.y,node:<PixelTree key={`t${i}`} {...t} variant={i}/>})),...buildings.map((b,i)=>({y:b.y+b.h,node:<PixelBuilding key={`b${i}`} b={b} index={i}/>})),...npcs.map((p,i)=>({y:p.y,node:<PixelPerson key={`n${i}`} position={p} npc tone={i}/>})),{y:position.y,node:<PixelPerson key="player" position={position}/>}].sort((a,b)=>a.y-b.y);
  return <div ref={container} className={`map-wrap pixel-world ${overview?'overview':''}`}><svg viewBox={overview?`0 0 ${WIDTH} ${HEIGHT}`:`${camera.x} ${camera.y} ${vw} ${vh}`} preserveAspectRatio={overview?"xMidYMid meet":"xMidYMid slice"} className="city" role="img" aria-label="ピクセルアートの街。主人公を動かして課題を探します。">
  <defs>
  <pattern id="grass" width="32" height="32" patternUnits="userSpaceOnUse"><rect width="32" height="32" fill="#89b47a"/><path d="M4 5h4v2H4zM22 17h3v2h-3zM12 28h4v2h-4z" fill="#78a46d"/><path d="M10 12h2v3h-2zM8 14h6v2H8zM27 3h2v3h-2zM25 5h6v2h-6z" fill="#a1c489"/></pattern>
