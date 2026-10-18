@@ -1,5 +1,5 @@
 export type Point = { x: number; y: number };
-export type Scene = 'noise' | 'streetlight' | 'warehouse' | 'earthquake' | 'crossing' | 'shop' | 'control' | 'parking' | 'food' | 'traffic' | 'care';
+export type Scene = 'noise' | 'streetlight' | 'warehouse' | 'waste' | 'crossing' | 'shop' | 'control' | 'parking' | 'food' | 'traffic' | 'care';
 export type Issue = Point & { id: string; label: string; icon: string; category: string; title: string; description: string; level: 1|2|3; scene: Scene; components: string[]; requirements?: string[]; note?: string; points: number };
 export const levelNames = {1:'センサ・OUTPUTを使う',2:'すぷしと連携する',3:'判断・制御の仕組みを設計する'};
 export const workshopNote='各課題は模型・模擬環境で実演します。レベル3②の時間は短縮してOK。実際の安全や安否を保証する装置ではなく、仕組みを考えるための課題です。';
@@ -7,7 +7,7 @@ export const issues: Issue[] = [
  {id:'l1-noise',level:1,scene:'noise',label:'騒音',icon:'!',category:levelNames[1],title:'街の騒音注意ランプ',description:'街で大きな騒音が発生していることを、周囲の人に知らせたい。音が設定した基準を超えたらLEDを点灯し、静かになったら消灯してください。',components:['マイク','LED'],x:769,y:788,points:10},
  {id:'l1-dark',level:1,scene:'streetlight',label:'街灯',icon:'!',category:levelNames[1],title:'暗くなったら街灯を点灯',description:'夜になって道が暗くなると、歩行者が安全に歩けません。周囲が暗くなったらLEDを点灯し、明るくなったら消灯してください。',components:['CdS','LED'],x:469,y:412,points:10},
  {id:'l1-temperature',level:1,scene:'warehouse',label:'高温警報',icon:'!',category:levelNames[1],title:'倉庫の高温警報',description:'倉庫が暑くなりすぎると、商品が傷んでしまいます。設定温度を超えたらブザーを鳴らし、温度が下がったら止めてください。',components:['温度','ブザー'],x:1012,y:412,points:10},
- {id:'l1-earthquake',level:1,scene:'earthquake',label:'地震',icon:'!',category:levelNames[1],title:'地震で傾いた建物の警報',description:'地震で建物が傾いたことを住民に知らせたい。建物の模型を傾けるとブザーが鳴り、元に戻すと止まる仕組みを作ってください。',components:['傾き','ブザー'],x:234,y:909,points:10},
+ {id:'l1-earthquake',level:1,scene:'waste',label:'ごみ箱',icon:'!',category:levelNames[1],title:'倒れたごみ箱のお知らせ',description:'風でごみ箱が倒れると、ごみが道に散らばってしまいます。ごみ箱の模型が倒れたらブザーを鳴らし、起こしたら止める仕組みを作ってください。',components:['傾き','ブザー'],x:234,y:909,points:10},
  {id:'l1-crossing',level:1,scene:'crossing',label:'押しボタン信号',icon:'!',category:levelNames[1],title:'歩行者用の押しボタン信号',description:'車が通り続けて、歩行者が道を渡れません。ボタンを押すとLEDが点灯し、5秒後に自動で消える仕組みを作ってください。LEDの点灯を「渡ってよい」の合図にします。',components:['スイッチ','LED'],x:475,y:1170,points:10},
  {id:'l1-dimming',level:1,scene:'streetlight',label:'明るさ調整',icon:'!',category:levelNames[1],title:'街灯の明るさ調整',description:'街灯がまぶしすぎる場所があります。つまみを回して、LEDの明るさを調整できるようにしてください。',components:['可変抵抗','LED'],x:1219,y:712,points:10},
  {id:'l1-visitor',level:1,scene:'shop',label:'来客通知',icon:'!',category:levelNames[1],title:'店舗の来客通知',description:'店主が奥で作業していても、来客に気付けるようにしたい。入口に人が近づいたら、振動モーターを2秒間動かしてください。同じ人が前にいる間は繰り返さず、一度離れて再び近づいたら通知してください。',components:['距離','振動モーター'],x:225,y:469,points:10},
