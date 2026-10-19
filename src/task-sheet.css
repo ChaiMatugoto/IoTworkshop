@@ -1,0 +1,159 @@
+/* A reading-first task sheet. Scale: title 34, section 22, body 22, action 16. */
+.task-overlay-backdrop{display:none}
+.exploration-layout:has(.task-sheet) .task-overlay-backdrop{display:block;position:fixed;inset:0;z-index:4;background:#25353f8c;backdrop-filter:blur(2px)}
+.issue-dialog:not(:has(.resident-dialogue)){position:fixed;inset:auto;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(1160px,94vw);max-width:none;max-height:92svh;border:0;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 18px 70px #122c3c38;animation:task-sheet-appear .18s ease-out}
+.issue-dialog .issue-panel.task-sheet{display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:0;max-height:92svh;color:#293a40;background:#fff}
+.task-sheet-header{position:relative;display:block;height:auto;min-height:0;padding:24px 78px 22px 38px;background:#fff;border:0;border-bottom:1px solid #e7ebe7}
+.task-heading-copy .level-label{display:inline-block;padding:5px 9px;border-radius:5px;font-size:14px;line-height:1.5;font-weight:600}
+.issue-dialog .task-sheet #issue-title{margin:12px 0 0;font-size:32px;line-height:1.45;letter-spacing:0;font-weight:700;color:#26383e}
+.task-close{position:absolute;top:25px;right:25px;width:36px;height:36px;border:1px solid #e3e8e2;border-radius:50%;background:#fff;color:#7a8780;font-size:14px;cursor:pointer}
+.task-close:hover{background:#f1f4ef;color:#2c4236}
+.task-sheet-body{display:grid;grid-template-columns:250px minmax(0,1fr);gap:40px;align-items:start;padding:26px 38px 30px;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.task-setting{min-width:0}
+.task-scene{width:100%;height:auto;aspect-ratio:1.65;border-radius:10px;overflow:hidden;background:#eef2e8;filter:saturate(.85)}
+.task-scene svg{display:block;width:100%;height:100%}
+.task-sheet .request-heading{display:flex;align-items:center;gap:10px;margin-top:16px;padding:0;border:0}
+.task-sheet .request-avatar{display:grid;place-items:center;flex-shrink:0;width:40px;height:46px;border-radius:8px;background:#f1f4eb;overflow:hidden}
+.task-sheet .request-avatar svg{display:block;width:36px;height:43px}
+.task-sheet .request-heading h3{font-size:17px;line-height:1.6;font-weight:500;color:#697669;margin:0}
+.task-reading{min-width:0;max-width:760px}
+.issue-dialog .task-sheet .resident-request{margin:0;padding:0;border:0;background:transparent;border-radius:0}
+.task-sheet .task-section-title{display:block;margin:0 0 13px;padding:0;border:0;background:none;font-size:22px;line-height:1.5;font-weight:700;letter-spacing:0;color:#2c4138}
+.issue-dialog .task-sheet .resident-request-copy p,.issue-dialog .task-sheet .resident-request-copy p:last-child{font-size:22px;line-height:1.85;font-weight:400;color:#48574e;margin:0;letter-spacing:0;overflow-wrap:anywhere}
+.issue-dialog .task-sheet .resident-wish{display:block;min-height:0;margin:28px 0 0;padding:24px 0 0;background:none;border:0;border-top:1px solid #dfe6db;border-radius:0;box-shadow:none}
+.issue-dialog .task-sheet .resident-wish p{font-size:23px;line-height:1.8;font-weight:500;color:#30463a;margin:0;letter-spacing:0;text-wrap:pretty}
+.task-sheet .resident-wish .task-section-title{font-size:22px;line-height:1.5;font-weight:700;color:#2c4138;margin:0 0 13px}
+.task-completion{padding:0 38px;border-top:1px solid #e3e8e0;background:#fafbf8}
+.completion-inline{display:flex;justify-content:space-between;align-items:center;gap:24px;min-height:84px;padding:18px 0}
+.task-sheet .completion-heading{font-size:16px;line-height:1.6;font-weight:500;letter-spacing:0;color:#6a786c}
+.completion-input-slot{width:310px;max-width:100%;flex-shrink:0}
+.completion-start{display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;height:46px;padding:0 16px;background:#fff;border:1px solid #cbd6c6;border-radius:7px;font-size:16px;line-height:1.5;font-weight:500;color:#44613d}
+.completion-start:hover{background:#f0f5eb;border-color:#a9bfa2}
+.completion-start span{font-size:21px;color:#7e9477}
+.task-sheet .inline-password-form{display:block;grid-template-columns:none;border:0!important;margin:0!important;padding:0!important;background:none}
+.task-sheet .inline-password-form .password-row{display:flex;align-items:center;justify-content:flex-start;flex-wrap:nowrap;gap:8px}
+.task-sheet .inline-password-form .password-row input{flex:1;min-width:0;width:auto;height:46px;padding:8px 10px 8px 16px;margin:0;border:1px solid #c3d0bd;border-radius:7px;background:#fff;color:#344b37;font:23px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.3em;text-align:center}
+.task-sheet .inline-password-form .password-row input::placeholder{color:#b9c4b3}
+.task-sheet .inline-password-form .password-row .primary{display:flex;align-items:center;justify-content:center;flex:0 0 72px;min-height:46px;width:auto;margin:0;padding:10px;border:0;border-radius:7px;background:#5a755a;box-shadow:none;font-size:15px;line-height:1.5;font-weight:500;color:#fff}
+.task-sheet .inline-password-form .password-row .primary:hover:not(:disabled){background:#476446}
+.password-cancel{flex:0 0 28px;height:34px;padding:0;border:0;border-radius:5px;background:transparent;font-size:12px;color:#8a9584}
+.password-cancel:hover{background:#ebf0e5;color:#526447}
+.task-sheet .inline-password-form .warning{margin:9px 0 0;font-size:14px;line-height:1.6;color:#a34f3d}
+.task-completed{display:flex;align-items:center;gap:12px;min-height:84px;padding:18px 0;color:#4d6f49}
+.task-completed-icon{display:grid;place-items:center;width:32px;height:32px;background:#e4eedc;border-radius:50%;font-size:19px}
+.task-completed strong{display:block;font-size:16px;font-weight:600}
+.task-completed div>span{display:block;margin-top:3px;font-size:14px;color:#72856b}
+@keyframes task-sheet-appear{from{opacity:0}to{opacity:1}}
+@media(max-width:1000px){.task-sheet-body{grid-template-columns:200px minmax(0,1fr);gap:30px}.task-sheet-header{padding:26px 74px 24px 30px}.task-sheet-body{padding:28px 30px 32px}.task-completion{padding:0 30px}.issue-dialog .task-sheet #issue-title{font-size:30px}}
+@media(max-width:760px){
+ .task-sheet-body{grid-template-columns:minmax(0,1fr);gap:24px;padding:26px}
+ .task-setting{display:flex;align-items:center;gap:18px}
+ .task-scene{width:140px;flex-shrink:0}
+ .task-sheet .request-heading{margin:0;gap:9px}
+ .task-sheet .request-heading h3{font-size:14px}
+ .task-reading{max-width:none}
+ .task-sheet-header{padding:24px 64px 22px 26px}
+ .issue-dialog .task-sheet #issue-title{font-size:28px}
+ .task-sheet .task-section-title,.task-sheet .resident-wish .task-section-title{font-size:21px;margin-bottom:12px}
+ .issue-dialog .task-sheet .resident-request-copy p,.issue-dialog .task-sheet .resident-request-copy p:last-child{font-size:20px;line-height:1.85}
+ .issue-dialog .task-sheet .resident-wish p{font-size:21px}
+ .task-close{top:20px;right:18px}
+ .task-completion{padding:0 26px}
+ .completion-inline{gap:12px;min-height:80px}
+ .task-sheet .completion-heading{font-size:14px}
+ .completion-input-slot{width:280px;flex-shrink:1}
+}
+@media(max-width:480px){
+ .issue-dialog:not(:has(.resident-dialogue)){width:95vw;border-radius:14px;max-height:94svh}
+ .issue-dialog .issue-panel.task-sheet{max-height:94svh}
+ .task-sheet-header{padding:22px 58px 20px 22px}
+ .issue-dialog .task-sheet #issue-title{font-size:25px}
+ .task-sheet-body{padding:22px;gap:22px}
+ .task-setting{gap:14px}.task-scene{width:112px}
+ .task-sheet .request-avatar{display:none}
+ .task-sheet .task-section-title,.task-sheet .resident-wish .task-section-title{font-size:20px}
+ .issue-dialog .task-sheet .resident-request-copy p,.issue-dialog .task-sheet .resident-request-copy p:last-child{font-size:19px}
+ .issue-dialog .task-sheet .resident-wish p{font-size:20px}
+ .task-completion{padding:0 22px}
+ .completion-inline{flex-wrap:wrap;padding:16px 0;gap:12px}
+ .completion-input-slot{width:100%;flex-shrink:0}
+ .task-sheet .completion-heading{font-size:13px}
+ .completion-start{font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){.issue-dialog:not(:has(.resident-dialogue)){animation:none}}
+/* Keep workshop references inside the task, without losing the reading position. */
+.task-reference-links{display:grid;gap:10px;margin:26px 0 0;padding:20px 0 0;border-top:1px solid #e2e8de;height:auto}
+.task-reference-links button{display:flex;align-items:center;gap:11px;width:100%;padding:13px 14px;border:1px solid #dce4d7;border-radius:8px;background:#fafcf7;font-size:16px;font-weight:500;line-height:1.5;color:#53684d;text-align:left}
+.task-reference-links button:hover,.task-reference-links button[aria-pressed="true"]{background:#edf3e7;border-color:#b8cbb0;color:#3c5833}
+.task-reference-links button>svg{width:19px;height:19px;flex-shrink:0}
+.task-reference-links button>span:last-child{margin-left:auto;font-size:18px;color:#8b9c83}
+.task-reference-panel{min-width:0}
+.task-reference-back{padding:0;margin:0 0 22px;border:0;background:none;font-size:15px;color:#627c58;line-height:1.6;text-align:left}
+.task-reference-back:hover{text-decoration:underline;text-underline-offset:4px}
+.task-level-hint{margin-top:22px;padding:24px;background:#f4f7f0;border-radius:10px;border:1px solid #e3eadc}
+.task-level-hint>span{font-size:14px;color:#74866b}
+.task-level-hint h4{font-size:22px;font-weight:600;line-height:1.6;margin:8px 0 16px;color:#354d36}
+.task-level-hint p{font-size:21px;line-height:1.85;color:#4f6350;margin:0}
+.task-parts-list{display:grid;gap:10px;margin-top:20px}
+.task-part-item{border:1px solid #e1e6de;border-radius:9px;background:#fff;overflow:hidden}
+.task-part-item summary{display:flex;align-items:center;gap:16px;padding:12px 16px;cursor:pointer;list-style:none}
+.task-part-item summary::-webkit-details-marker{display:none}
+.task-part-item summary:hover{background:#f8faf5}
+.task-part-item summary img{flex-shrink:0;object-fit:contain;background:#f0f4ea;border-radius:6px}
+.task-part-item summary strong{display:block;font-size:18px;line-height:1.5;font-weight:600;color:#35483c}
+.task-part-item summary code{display:block;margin-top:3px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.5;color:#7b8873}
+.task-part-chevron{margin-left:auto;color:#8a9a82;font-size:20px;flex-shrink:0}
+.task-part-item[open] .task-part-chevron{transform:rotate(45deg)}
+.task-part-item p{margin:0;padding:8px 20px 22px;font-size:19px;line-height:1.9;color:#52654f}
+@media(max-width:760px){.task-setting{flex-wrap:wrap}.task-reference-links{display:flex;flex-wrap:wrap;width:100%;gap:10px;margin:0;padding:16px 0 0}.task-reference-links button{width:auto;flex:1;min-width:145px;font-size:15px}.task-level-hint{padding:20px}.task-level-hint p{font-size:19px}.task-part-item p{font-size:18px}}
+
+.task-reference-links button::before,.task-reference-links button::after{content:none!important}
+@media(max-width:760px){.task-setting .task-reference-links button{font-size:15px}}
+/* Shared reference content, with the same disclosures on the main pages. */
+.sensor-description>span{display:block;padding:8px 20px 0;font-size:13px;color:#76856d}
+.sensor-description>span code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.task-reference-panel .parts-caption{font-size:13px;line-height:1.8;margin-top:20px}
+.task-reference-panel .hints-list{gap:12px;margin-top:20px}
+.task-reference-panel .hint-card summary{padding:20px;gap:12px}
+.task-reference-panel .hint-title{font-size:19px}
+.task-reference-panel .hint-level{font-size:12px;padding:6px 8px}
+.task-reference-panel .hint-content{margin:0 20px;padding:18px 0 22px}
+.task-reference-panel .hint-content p{font-size:19px;line-height:1.85}
+.parts-main>.sensor-reference>.task-parts-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start;margin-top:0}
+.parts-main>.sensor-reference .task-part-item summary{padding:16px;gap:12px;min-height:96px}
+.parts-main>.sensor-reference .task-part-item summary strong{font-size:20px}
+.parts-main>.sensor-reference .task-part-item p{font-size:20px}
+.task-part-item summary:focus-visible{outline:3px solid #5b889c;outline-offset:-4px;border-radius:8px}
+@media(max-width:1100px){.parts-main>.sensor-reference>.task-parts-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.parts-main>.sensor-reference>.task-parts-list{grid-template-columns:minmax(0,1fr)}.parts-main>.sensor-reference .task-part-item p{font-size:19px}}
+/* Completion is an operator detail, kept visually secondary. */
+.task-completion{background:#fff;border-top-color:#edf0eb}
+.completion-inline{min-height:58px;padding:12px 0;gap:16px}
+.task-sheet .completion-heading{font-size:12px;color:#919b8d;font-weight:400}
+.completion-input-slot{width:226px;display:flex;justify-content:flex-end}
+.completion-start{justify-content:flex-end;gap:9px;height:30px;width:auto;padding:3px 0;border:0;border-radius:3px;background:transparent;font-size:12px;font-weight:400;color:#87957f}
+.completion-start:hover{background:transparent;border:0;color:#52694a;text-decoration:underline;text-underline-offset:4px}
+.completion-start span{font-size:14px;color:inherit}
+.task-sheet .inline-password-form{width:226px}
+.task-sheet .inline-password-form .password-row{gap:6px}
+.task-sheet .inline-password-form .password-row input{height:34px;font-size:17px;padding:5px 7px 5px 12px;border-color:#d9e0d3;border-radius:5px}
+.task-sheet .inline-password-form .password-row .primary{flex-basis:54px;min-height:34px;font-size:12px;padding:6px;background:#7e8e76;border-radius:5px}
+.password-cancel{flex-basis:24px;height:30px;font-size:11px}
+/* Compact disclosures: image, name and board marking form one visual group. */
+.parts-main:has(>.sensor-reference){max-width:1280px}
+.parts-main>.sensor-reference{max-width:none}
+.parts-main>.sensor-reference>.task-parts-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start;margin:0;border:0;border-radius:0;background:none;overflow:visible}
+.parts-main>.sensor-reference .task-part-item{min-width:0;border:1px solid #e1e7dc;border-radius:11px;background:white;overflow:hidden;box-shadow:none}
+.parts-main>.sensor-reference .task-part-item summary{display:flex;align-items:center;gap:12px;padding:16px;min-height:94px}
+.parts-main>.sensor-reference .task-part-item summary img{width:62px;height:58px;flex-shrink:0;background:#f1f5ea;border-radius:7px;object-fit:contain}
+.parts-main>.sensor-reference .task-part-item summary>span:not(.task-part-chevron){display:block;min-width:0}
+.parts-main>.sensor-reference .task-part-item summary strong{font-size:20px;font-weight:600;line-height:1.5;color:#35483c;overflow-wrap:anywhere}
+.parts-main>.sensor-reference .task-part-item summary code{display:block;font-size:13px;line-height:1.5;margin-top:4px;color:#7b8873;overflow-wrap:anywhere}
+.parts-main>.sensor-reference .task-part-chevron{font-size:20px;color:#8a9a82;margin-left:auto;flex-shrink:0}
+.parts-main>.sensor-reference .sensor-description{padding:16px 18px 20px;margin:0 16px;border-top:1px solid #e9ede4;max-width:none}
+.parts-main>.sensor-reference .sensor-description>span{padding:0;font-size:13px;line-height:1.6;color:#73816c}
+.parts-main>.sensor-reference .task-part-item p{margin:10px 0 0;padding:0;font-size:19px;line-height:1.85;color:#52654f}
+.parts-main>.sensor-reference .task-part-item[open]{border-color:#c5d4bb}
+@media(max-width:1100px){.parts-main>.sensor-reference>.task-parts-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.parts-main>.sensor-reference>.task-parts-list{grid-template-columns:minmax(0,1fr);gap:12px}.parts-main>.sensor-reference .task-part-item summary{min-height:86px;padding:14px 16px}.parts-main>.sensor-reference .sensor-description{padding:14px 0 20px}.parts-main>.sensor-reference .task-part-item p{font-size:19px}}
+@media(max-width:480px){.completion-inline{min-height:54px;flex-wrap:nowrap;gap:10px}.task-sheet .completion-heading{font-size:11px}.completion-input-slot{min-width:0;width:200px}.task-sheet .inline-password-form{width:100%}.completion-start{font-size:11px}}

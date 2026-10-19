@@ -1,5 +1,17 @@
+import { PartsList } from './PartsList';
 import { parts } from '../data/parts';
-import '../parts.css';
-export default function PartsCatalog(){
- return <div className="parts-page"><header className="parts-header"><a className="parts-back" href="#/">← マップへ戻る</a><a className="brand" href="#/">都市課題マップ</a></header><main className="parts-main"><section className="parts-intro"><span className="parts-eyebrow">ワークショップの道具箱</span><h1>センサ・部品一覧<span>10種類</span></h1><p>部品のできることと、基板に書かれている表記を確認しよう。</p></section><div className="parts-grid">{parts.map(part=><article className="part-card" key={part.id}><div className="part-image"><img src={`${import.meta.env.BASE_URL}parts/${part.image}`} alt={`${part.name}のイラスト`} width="280" height="180" loading="lazy"/></div><div className="part-body"><h3>{part.name}</h3><div className="part-board-label"><span>基板の表記</span><code>{part.boardLabel}</code></div><p className="part-description">{part.description}</p></div></article>)}</div><p className="parts-caption">画像は部品のイメージです。実際に使う部品とは形や色が異なる場合があります。</p></main></div>;
+import { ReferenceHeader } from './ReferenceHeader';
+
+export default function PartsCatalog() {
+  return <div className="parts-page">
+    <ReferenceHeader active="parts" />
+    <main className="parts-main">
+      <section className="parts-intro">
+        <span className="parts-eyebrow"><i aria-hidden="true" />ワークショップの道具箱</span>
+        <h1>センサ一覧<span>{parts.length}種類の部品</span></h1>
+        <p>できることを知る。動かして、確かめる。</p>
+      </section>
+      <PartsList />
+    </main>
+  </div>;
 }

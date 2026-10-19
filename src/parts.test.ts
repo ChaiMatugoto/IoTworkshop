@@ -10,6 +10,6 @@ test('all ten workshop parts have introductory text and valid self-contained ill
 
 test('board markings match the supplied lettering and Slope uses the whole board',()=>{
  assert.deepEqual(parts.map(p=>p.boardLabel).sort(),['Slope','Switch','PotentioMeter','Microphone','Distance','Buzzer','LED','Temperature','Vibration','CdS'].sort());
- assert.equal(parts.some(p=>p.boardLabel==='Spare'),false);assert.match(parts.find(p=>p.id==='tilt')!.description,/基板ごと傾け/);
- for(const part of parts){assert.ok(part.description.length>=50);assert.equal('example' in part,false);}
+ assert.equal(parts.some(p=>p.boardLabel==='Spare'),false);assert.match(parts.find(p=>p.id==='tilt')!.description,/基板ごと傾け/);assert.match(parts.find(p=>p.id==='temperature')!.description,/センサを指でつまんでみましょう/);
+ for(const part of parts){assert.ok(part.description.split('。').filter(sentence=>sentence.trim()).length>=2);assert.equal('example' in part,false);}
 });
