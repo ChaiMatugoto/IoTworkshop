@@ -11,7 +11,17 @@ export function LevelOneGuide() {
       <div className="guide-sections">
         {levelOneSections.map(section => <details className="guide-fields" key={section.title}>
           <summary><span><strong>{section.title}</strong><small>{section.purpose}</small></span><span className="guide-toggle" aria-hidden="true">＋</span></summary>
-          {section.title==='処理'&&<aside className="guide-note"><strong>「暗い」「暑い」だけでは、基板は判断できません。</strong><p>数値で判断する場合は、シリアルモニターなどで実際の値を見て、条件を決めましょう。CdSの「3000」は説明用の値です。暗いときに値が増えるか減るかも確かめてから、「未満」「以上」を選びます。</p></aside>}
+          {section.title==='処理'&&<aside className="guide-note"><strong>「暗い」「暑い」だけでは、基板は判断できません。</strong><p>数値で判断する場合は、シリアルモニターなどで実際の値を見て、条件を決めましょう。CdSの「3000」は説明用の値です。暗いときに値が増えるか減るかも確かめてから、「未満」「以上」を選びます。</p>
+            <h4>シリアルモニターで数値を見てみよう</h4>
+            <p>シリアルモニターは、基板から送られた数値やメッセージを見る画面です。センサが今どんな値を読み取っているかを確認できます。</p>
+            <ol className="guide-upload">
+              <li>センサの値を表示するプログラムを基板に書き込み、USBでつないだままにします。まだプログラムがない場合は、ChatGPTに「まずセンサの値をシリアルモニターで確認したい」と伝えましょう。</li>
+              <li>Arduino IDEの画面右上にある虫眼鏡のアイコンを押します。見つからない場合は、上のメニューの「ツール」→「シリアルモニタ」を開きます。画面下に表示欄が出ます。</li>
+              <li>表示欄の「baud（ボーレート）」を、コード内の <code>Serial.begin(...)</code> の数字に合わせます。たとえば <code>Serial.begin(115200)</code> なら「115200 baud」を選びます。</li>
+              <li>センサに手を近づけたり、光を遮ったりして、数値の変化を見ましょう。動かしたい状態と、動かしたくない状態の値を比べて、条件に使う数値を決めます。その条件をChatGPTに伝えて、プログラムを調整しましょう。</li>
+            </ol>
+            <p>何も表示されないときは、USB接続と選択中のポートを確認します。文字が読めないときは、ボーレートを見直しましょう。表示用のコードが入っているか分からない場合は、ChatGPTに確認してください。</p>
+          </aside>}
           <dl>{section.fields.map(field => <div className="guide-field" key={field.name}><dt>{field.name}</dt><dd><p>{field.description}</p>{field.example && <p className="guide-field-example"><span>書き方の例</span>{field.example}</p>}</dd></div>)}</dl>
         </details>)}
       </div>
