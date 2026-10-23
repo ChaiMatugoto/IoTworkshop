@@ -1,5 +1,6 @@
 /* Level accents and native disclosure behavior; layout is in shared-screen.css. */
 .hint-card{--hint-color:#9463ae;--hint-bg:#f4edf8}
+.hint-title .hint-points{display:block;margin-top:5px;font-size:17px;line-height:1.5;font-weight:600;color:var(--hint-color)}
 .hint-level-2{--hint-color:#4e859e;--hint-bg:#ecf5f9}
 .hint-level-3{--hint-color:#b57b50;--hint-bg:#fcf1e7}
 .hint-chevron{border-right:2px solid;border-bottom:2px solid;transform:rotate(45deg);transition:transform .18s}

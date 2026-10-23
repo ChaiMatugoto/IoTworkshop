@@ -2,6 +2,7 @@ import { LevelTwoGuide } from './LevelTwoGuide';
 import { LevelOneGuide } from './LevelOneGuide';
 import { LevelThreeGuide } from './LevelThreeGuide';
 import { hints } from '../data/hints';
+import { issues } from '../data/issues';
 
 /** All three levels are available in every location; no task-specific filtering. */
 export function HintsList() {
@@ -10,7 +11,7 @@ export function HintsList() {
       {hints.map(hint => <details className={`hint-card hint-level-${hint.level}`} key={hint.level}>
         <summary>
           <span className="hint-level">レベル{hint.level}</span>
-          <span className="hint-title">{hint.title}</span>
+          <span className="hint-title">{hint.title}<small className="hint-points">1問クリアで {issues.find(issue => issue.level === hint.level)?.points}pt</small></span>
           <span className="hint-chevron" aria-hidden="true" />
         </summary>
         <div className="hint-content">{hint.level===1?<LevelOneGuide/>:hint.level===2?<LevelTwoGuide/>:<LevelThreeGuide/>}</div>
