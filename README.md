@@ -93,6 +93,6 @@ npm run preview
 部品一覧の英語表記は実基板の文字に合わせています（PotentioMeter等の大文字小文字も保持）。Spareは表示せず、傾きスイッチは基板ごと傾ける説明にしています。
 
 ## ヒント
-ヘッダーの「ヒント」、または `/#/hints` から、レベル1〜3のヒントを開閉できます。文章は現在ダミーです。`src/data/hints.ts` で編集できます。
+ヘッダーの「ヒント」、または `/#/hints` から、レベル1〜3のヒントを開閉できます。レベル1にはChatGPTの項目記入からArduino IDEへの書き込みまでのガイドがあります。項目の説明は `src/data/levelOneGuide.ts`、手順は `src/components/LevelOneGuide.tsx` で編集できます。レベル2のGAS連携ガイドは `src/components/LevelTwoGuide.tsx` から編集できます。レベル3は仮の文章で、`src/data/hints.ts` から編集できます。
 
 課題画面は住民との会話を「次へ」で進め、お願いと目指すシステムを確認する形式です。会話・お願い・目標文は `src/data/residents.ts` で編集できます。「パスワードを入力」を押すと、同じ位置に4桁入力欄が表示されます。会話は矢印キーでも進められ、課題マークの近くに表示されます。
