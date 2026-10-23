@@ -3,6 +3,7 @@ import { levelOneSections } from '../data/levelOneGuide';
 export function LevelOneGuide() {
   return <div className="level-one-guide">
     <p className="guide-lead">やりたい動きを言葉で整理し、ChatGPTでプログラムを作ります。できたコードをArduino IDEに貼り付けて、基板で動かしてみましょう。</p>
+    <p>新しく1からプログラムを作るときは、ChatGPTに<strong>「プログラムを生成する」</strong>と入力してください。</p>
     <ol className="guide-route" aria-label="取り組みの流れ"><li>項目を整理</li><li>コードを生成</li><li>基板で実行</li></ol>
     <section className="guide-step">
       <h3><span aria-hidden="true">1</span>ChatGPTに伝える項目を整理する</h3>

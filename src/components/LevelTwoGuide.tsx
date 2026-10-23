@@ -52,15 +52,7 @@ export function LevelTwoGuide() {
     </section>
 
     <section className="guide-step">
-      <h3><span aria-hidden="true">4</span>シートIDを確認する</h3>
-      <p>生成されたコードにシートIDの設定欄がある場合は、用意されているスプレッドシートのIDを入れます。たとえば、<code>SPREADSHEET_ID</code> という名前で書かれています。</p>
-      <div className="gas-sheet-url"><span>スプレッドシートを開いたときのURL</span><code>https://docs.google.com/spreadsheets/d/<mark>ここがシートID</mark>/edit</code></div>
-      <dl className="gas-settings"><div><dt>シートID</dt><dd>ブラウザのURLにある <code>/d/</code> と <code>/edit</code> の間の長い文字列です。コードがIDを求めている場合は、URL全部ではなく、この部分だけを入れます。</dd></div><div><dt>セル・列の場所</dt><dd>読み取る場所や記録する列が、シートとコードで一致しているか確認します。街灯の例でB2を読むコードなら、指示もB2に書きます。</dd></div></dl>
-      <p className="guide-small">設定欄が見つからないときは、ChatGPTに「このコードでシートID・セルをどこに設定しますか？」と聞いてください。</p>
-    </section>
-
-    <section className="guide-step">
-      <h3><span aria-hidden="true">5</span>GASを「ウェブアプリ」としてデプロイする</h3>
+      <h3><span aria-hidden="true">4</span>GASを「ウェブアプリ」としてデプロイする</h3>
       <p>「デプロイ」は、作ったGASをESP32から呼び出せる状態にし、接続先のURLを発行する操作です。スプレッドシートの「共有」とは別の設定です。</p>
       <ol className="guide-upload"><li>GASの編集画面の右上にある「デプロイ」→「新しいデプロイ」をクリックします。</li><li>「種類の選択」の横にある歯車のアイコンを押し、「ウェブアプリ」を選びます。</li></ol>
       <dl className="gas-deploy-settings"><div><dt>次のユーザーとして実行</dt><dd><strong>自分</strong><span>シートを操作する権限を、自分のGoogleアカウントで使います。</span></dd></div><div><dt>アクセスできるユーザー</dt><dd><strong>全員</strong><span>ESP32がGoogleへのログインなしでアクセスするための設定です。「Googleアカウントを持つ全員」ではなく、ログイン不要の「全員」を選びます。</span></dd></div></dl>
@@ -70,10 +62,18 @@ export function LevelTwoGuide() {
     </section>
 
     <section className="guide-step">
-      <h3><span aria-hidden="true">6</span>発行されたURLをESP32側に入れる</h3>
+      <h3><span aria-hidden="true">5</span>発行されたURLをESP32側に入れる</h3>
       <p>Arduino IDE用のコードを開き、GASのURLを設定する場所に、コピーした <code>/exec</code> のURLを入れます。たとえば <code>SCRIPT_URL</code> という名前の設定欄です。</p>
       <div className="gas-exec-url"><span>使うのは、この形のURL</span><code>https://script.google.com/macros/s/…/exec</code></div>
-      <ol className="guide-upload"><li>コード内のWi-Fi名とパスワードも、会場で使うものに書き換えます。ChatGPTに設定場所を聞くことはできますが、Wi-Fiのパスワードそのものを送る必要はありません。</li><li>Arduino IDEで画面左上の「✓」を押し、エラーが出なければ、その隣の「→」でESP32に書き込みます。</li><li>シートの指示を変えたり、センサを動かしたりして確認します。街灯の例ならB2に「ON」で点灯、「OFF」で消灯します。5秒ごとに読み取る設定なら、変更後は少し待ちましょう。</li></ol>
+      <div className="gas-wifi-settings">
+        <h4>書き込む前に、Wi-Fiの設定も変更しよう</h4>
+        <dl className="gas-settings">
+          <div><dt><code>WIFI_SSID</code></dt><dd>会場のWi-Fi名に書き換える</dd></div>
+          <div><dt><code>WIFI_PASSWORD</code></dt><dd><strong>前のホワイトボードを見て、Wi-Fiのパスワードに書き換える</strong></dd></div>
+        </dl>
+        <p className="guide-small">設定名はコードによって、<code>ssid</code> や <code>password</code> などの場合もあります。見つからないときはChatGPTに設定場所を聞きましょう。パスワードそのものを送る必要はありません。</p>
+      </div>
+      <ol className="guide-upload"><li>GASのURL・Wi-Fi名・Wi-Fiのパスワードの3つを書き換えたか確認します。</li><li>Arduino IDEで画面左上の「✓」を押し、エラーが出なければ、その隣の「→」でESP32に書き込みます。</li><li>シートの指示を変えたり、センサを動かしたりして確認します。街灯の例ならB2に「ON」で点灯、「OFF」で消灯します。5秒ごとに読み取る設定なら、変更後は少し待ちましょう。</li></ol>
       <p className="guide-small">GASのURL・シートID・スプレッドシートのURLは、それぞれ別のものです。ESP32の接続先には、GASのウェブアプリURLを使います。</p>
     </section>
 
