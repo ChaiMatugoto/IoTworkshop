@@ -1,3 +1,4 @@
+import { createParticipantRequests } from './participantRequests';
 import { createClient } from '@supabase/supabase-js';
 const url=import.meta.env.VITE_SUPABASE_URL;const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 export const eventId=import.meta.env.VITE_WORKSHOP_EVENT_ID as string|undefined;
@@ -6,4 +7,5 @@ export const participant=configured?createClient(url,key,{auth:{storageKey:'urba
 export const admin=configured?createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}}):null;
 export { parseTeam, serverError, type RemoteTeam } from './cloudContract';
 import { parseTeam, serverError } from './cloudContract';
-export async function rpcTeam(name:string,args:Record<string,unknown>){if(!participant)throw new Error('共有サーバーは未設定です。');const {data,error}=await participant.rpc(name,args);if(error)throw new Error(serverError(error.message));if(data?.error)throw new Error(serverError(data.error));return parseTeam(data);}
+export const participantRequest = participant ? createParticipantRequests(participant) : null;
+export async function rpcTeam(name:string,args:Record<string,unknown>){if(!participantRequest)throw new Error('共有サーバーは未設定です。');const {data,error}=await participantRequest(name,args);if(error)throw new Error(serverError(error.message));if(data?.error)throw new Error(serverError(data.error));return parseTeam(data);}

@@ -22,3 +22,29 @@ test('team history validates timestamps and entry metadata',()=>{
  assert.deepEqual(parseTeamDetails(details),details);assert.equal(parseTeamDetails({...details,entries:[]}).entries.length,0);
  for(const value of [null,{}, {...details,entries:[null]},{...details,entries:[{...details.entries[0],completed_at:'bad'}]},{...details,entries:[{...details.entries[0],level:4}]}])assert.throws(()=>parseTeamDetails(value));
 });
+
+import { createParticipantRequests } from './lib/participantRequests';
+import type { SupabaseClient } from '@supabase/supabase-js';
+test('participant requests renew before expiry and after 401 without reload or a new identity', async()=>{
+ let renewals=0, signups=0, time=0, calls=0;
+ let rejectOnce=false, failRefresh=false;
+ const session={user:{id:'existing-team-user'},expires_at:9999999999};
+ const client={auth:{
+  getSession:async()=>({data:{session},error:null}),
+  refreshSession:async()=>{renewals++;return {data:{session:failRefresh?null:session},error:failRefresh?new Error('offline'):null};},
+  signInAnonymously:async()=>{signups++;throw new Error('must not replace identity');},
+ },rpc:async(name:string)=>{calls++;if(rejectOnce){rejectOnce=false;return {status:401,error:{code:'PGRST301'},data:null};}return {status:200,error:null,data:{name,user:session.user.id}};}} as unknown as SupabaseClient;
+ const request=createParticipantRequests(client,()=>time);
+ const initial=await Promise.all(Array.from({length:4},()=>request('map_my_team',{})));
+ assert.equal(renewals,1);assert.equal(signups,0);assert.ok(initial.every(r=>r.status===200));
+ time=300001;
+ await request('map_my_team',{});assert.equal(renewals,2);
+ rejectOnce=true;
+ const recovered=await request('map_redeem',{});
+ assert.equal(recovered.status,200);assert.equal(renewals,3);assert.equal(calls,7);assert.equal(signups,0);
+ failRefresh=true;time+=300001;
+ await assert.rejects(request('map_my_team',{}),/offline/);
+ failRefresh=false;
+ assert.equal((await request('map_my_team',{})).status,200);
+ assert.equal(signups,0);
+});
